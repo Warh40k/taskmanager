@@ -1,0 +1,12 @@
+Log created: 2022-10-14T13:17:08.628535000Z
+Process ID:  26011 (0x659b)
+Parent PID:  1 (0x1)
+Executable:  /usr/lib/virtualbox/VBoxHeadless
+Arg[0]: /usr/lib/virtualbox/VBoxHeadless
+Arg[1]: --comment
+Arg[2]: y2aa
+Arg[3]: --startvm
+Arg[4]: b8d330ce-a44f-49c4-a58f-349c744f4396
+Arg[5]: --vrde
+Arg[6]: config
+AddRef: illegal refcnt=3221225469 state=2
