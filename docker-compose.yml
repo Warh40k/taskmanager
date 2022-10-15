@@ -1,35 +1,51 @@
 version: '3.2'
 
+volumes:
+  mysql-data:
+    external: true
+  phpmyadmin-volume:
+    external: true
+
 services:
+#  frontend:
+#    build: frontend
+#    ports:
+#      - 20080:80
+#    volumes:
+#      # Re-use local composer cache via host-volume
+#      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+#      # Mount source-code for development
+#      - ./:/app
+#
+#  backend:
+#    build: backend
+#    ports:
+#      - 21080:80
+#    volumes:
+#      # Re-use local composer cache via host-volume
+#      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+#      # Mount source-code for development
+#      - ./:/app
 
-  frontend:
-    build: frontend
-    ports:
-      - 20080:80
-    volumes:
-      # Re-use local composer cache via host-volume
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      # Mount source-code for development
-      - ./:/app
-
-  backend:
-    build: backend
-    ports:
-      - 21080:80
-    volumes:
-      # Re-use local composer cache via host-volume
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      # Mount source-code for development
-      - ./:/app
-
-  mysql:
-    image: mysql:5.7
+  data_base:
+    image: mariadb:10.9.3
     environment:
-      - MYSQL_ROOT_PASSWORD=verysecret
-      - MYSQL_DATABASE=yii2advanced
-      - MYSQL_USER=yii2advanced
-      - MYSQL_PASSWORD=secret
-
+      - MYSQL_ROOT_PASSWORD=252800nz
+      - MYSQL_DATABASE=hrm_system
+      - MYSQL_USER=dev
+      - MYSQL_PASSWORD=456654nz
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - '3306:3306'
+  phpmyadmin:
+    image: phpmyadmin:5.2.0
+    volumes:
+      - phpmyadmin-volume:/etc/phpmyadmin/config.usr.inc.php
+    links:
+      - data_base:db
+    ports:
+      - '82:80'
   #pgsql:
   #  image: postgres:9.5
   #  environment:

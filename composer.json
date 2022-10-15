@@ -40,7 +40,7 @@
         "fxp-asset": {
             "enabled": false
         },
-        "platform-check": false,
+        "platform-check": false
 
     },
     "repositories": [
