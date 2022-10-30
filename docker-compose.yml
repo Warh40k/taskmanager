@@ -7,29 +7,29 @@ volumes:
     external: true
 
 services:
-  frontend:
-    build: frontend
-    ports:
-      - 20080:80
-    volumes:
-      # Re-use local composer cache via host-volume
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      # Mount source-code for development
-      - ./:/app
-    links:
-      - data_base:db
-
-  backend:
-    build: backend
-    ports:
-      - 21080:80
-    volumes:
-      # Re-use local composer cache via host-volume
-      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-      # Mount source-code for development
-      - ./:/app
-
-
+#  frontend:
+#    build: frontend
+#    ports:
+#      - 20080:80
+#    volumes:
+#      # Re-use local composer cache via host-volume
+#      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+#      # Mount source-code for development
+#      - ./:/app
+#    links:
+#      - data_base:db
+#    env_file:
+#      - .env
+#
+#  backend:
+#    build: backend
+#    ports:
+#      - 21080:80
+#    volumes:
+#      # Re-use local composer cache via host-volume
+#      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+#      # Mount source-code for development
+#      - ./:/app
   data_base:
     image: mariadb:10.9.3
     environment:
@@ -51,6 +51,10 @@ services:
       - '82:80'
   netshoot:
     image: nicolaka/netshoot:latest
+  selenium:
+    image: selenium/standalone-firefox
+    network_mode: "host"
+    shm_size: "2g"
   #pgsql:
   #  image: postgres:9.5
   #  environment:

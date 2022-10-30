@@ -78,6 +78,11 @@ class SiteController extends Controller
         return $this->render('index.twig',['name' => 'Anton']);
     }
 
+    public function actionTest()
+    {
+        return $this->render('test.php');
+    }
+
     /**
      * Logs in a user.
      *
@@ -143,6 +148,7 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
+        xdebug_info();
         return $this->render('about');
     }
 
