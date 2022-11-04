@@ -2,17 +2,16 @@
 
 namespace frontend\controllers;
 
-use common\models\Employee;
-use common\models\search\EmployeeSearch;
-use frontend\models\SignupForm;
+use common\models\Department;
+use common\models\search\DepartmentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * EmployeeController implements the CRUD actions for Employee model.
+ * DepartmentController implements the CRUD actions for Department model.
  */
-class EmployeeController extends Controller
+class DepartmentController extends Controller
 {
     /**
      * @inheritDoc
@@ -33,13 +32,13 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Lists all Employee models.
+     * Lists all Department models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new EmployeeSearch();
+        $searchModel = new DepartmentSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -49,31 +48,33 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Displays a single Employee model.
-     * @param int $employee_id Employee ID
+     * Displays a single Department model.
+     * @param int $department_id Department ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($employee_id)
+    public function actionView($department_id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($employee_id),
+            'model' => $this->findModel($department_id),
         ]);
     }
 
     /**
-     * Creates a new Employee model.
+     * Creates a new Department model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new SignupForm();
+        $model = new Department();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->signup()) {
-                return $this->redirect(['view', 'employee_id' => $model->employee_id]);
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'department_id' => $model->department_id]);
             }
+        } else {
+            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
@@ -82,18 +83,18 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Updates an existing Employee model.
+     * Updates an existing Department model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $employee_id Employee ID
+     * @param int $department_id Department ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($employee_id)
+    public function actionUpdate($department_id)
     {
-        $model = $this->findModel($employee_id);
+        $model = $this->findModel($department_id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'employee_id' => $model->employee_id]);
+            return $this->redirect(['view', 'department_id' => $model->department_id]);
         }
 
         return $this->render('update', [
@@ -102,29 +103,29 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Deletes an existing Employee model.
+     * Deletes an existing Department model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $employee_id Employee ID
+     * @param int $department_id Department ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($employee_id)
+    public function actionDelete($department_id)
     {
-        $this->findModel($employee_id)->delete();
+        $this->findModel($department_id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Employee model based on its primary key value.
+     * Finds the Department model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $employee_id Employee ID
-     * @return Employee the loaded model
+     * @param int $department_id Department ID
+     * @return Department the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($employee_id)
+    protected function findModel($department_id)
     {
-        if (($model = Employee::findOne(['employee_id' => $employee_id])) !== null) {
+        if (($model = Department::findOne(['department_id' => $department_id])) !== null) {
             return $model;
         }
 

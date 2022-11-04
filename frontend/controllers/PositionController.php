@@ -2,17 +2,16 @@
 
 namespace frontend\controllers;
 
-use common\models\Employee;
-use common\models\search\EmployeeSearch;
-use frontend\models\SignupForm;
+use common\models\Position;
+use common\models\search\PositionsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * EmployeeController implements the CRUD actions for Employee model.
+ * PositionController implements the CRUD actions for Position model.
  */
-class EmployeeController extends Controller
+class PositionController extends Controller
 {
     /**
      * @inheritDoc
@@ -33,13 +32,13 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Lists all Employee models.
+     * Lists all Position models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new EmployeeSearch();
+        $searchModel = new PositionsSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -49,31 +48,33 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Displays a single Employee model.
-     * @param int $employee_id Employee ID
+     * Displays a single Position model.
+     * @param int $position_id Position ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($employee_id)
+    public function actionView($position_id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($employee_id),
+            'model' => $this->findModel($position_id),
         ]);
     }
 
     /**
-     * Creates a new Employee model.
+     * Creates a new Position model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new SignupForm();
+        $model = new Position();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->signup()) {
-                return $this->redirect(['view', 'employee_id' => $model->employee_id]);
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'position_id' => $model->position_id]);
             }
+        } else {
+            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
@@ -82,18 +83,18 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Updates an existing Employee model.
+     * Updates an existing Position model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $employee_id Employee ID
+     * @param int $position_id Position ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($employee_id)
+    public function actionUpdate($position_id)
     {
-        $model = $this->findModel($employee_id);
+        $model = $this->findModel($position_id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'employee_id' => $model->employee_id]);
+            return $this->redirect(['view', 'position_id' => $model->position_id]);
         }
 
         return $this->render('update', [
@@ -102,29 +103,29 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Deletes an existing Employee model.
+     * Deletes an existing Position model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $employee_id Employee ID
+     * @param int $position_id Position ID
      * @return \yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($employee_id)
+    public function actionDelete($position_id)
     {
-        $this->findModel($employee_id)->delete();
+        $this->findModel($position_id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Employee model based on its primary key value.
+     * Finds the Position model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $employee_id Employee ID
-     * @return Employee the loaded model
+     * @param int $position_id Position ID
+     * @return Position the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($employee_id)
+    protected function findModel($position_id)
     {
-        if (($model = Employee::findOne(['employee_id' => $employee_id])) !== null) {
+        if (($model = Position::findOne(['position_id' => $position_id])) !== null) {
             return $model;
         }
 
