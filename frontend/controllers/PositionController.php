@@ -71,7 +71,7 @@ class PositionController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'position_id' => $model->position_id]);
+                return $this->redirect(['index']);
             }
         } else {
             $model->loadDefaultValues();
@@ -94,7 +94,7 @@ class PositionController extends Controller
         $model = $this->findModel($position_id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'position_id' => $model->position_id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [

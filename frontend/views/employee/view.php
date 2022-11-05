@@ -16,11 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'employee_id' => $model->employee_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'employee_id' => $model->employee_id], [
+        <?= Html::a('Редактировать', ['update', 'employee_id' => $model->employee_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'employee_id' => $model->employee_id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены, что хотите удалить данного пользователя?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -33,9 +33,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'first_name',
             'second_name',
             'third_name',
-            'date_attempt',
-            'position',
-            'department',
+            'date_attempt:datetime',
+            [
+                'label' => 'Отдел',
+                'value' => \common\models\Department::findOne(['department_id' => $model->department])->name
+            ],
+            [
+                'label' => 'Должность',
+                'value' => \common\models\Position::findOne(['position_id' => $model->position])->name
+            ],
             'schedule',
         ],
     ]) ?>
