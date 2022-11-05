@@ -16,6 +16,8 @@ class SignupForm extends Model
     public $username;
     public $email;
     public $password;
+
+    public $role_name;
     public $employee;
 
     public $first_name;
@@ -34,9 +36,9 @@ class SignupForm extends Model
     {
         return [
             [['email'], 'trim'],
-            [['username','first_name', 'second_name','third_name','date_attempt', 'position','department', 'schedule', 'password'], 'required'],
+            [['username','first_name', 'second_name','third_name','date_attempt', 'position','department', 'schedule', 'password', 'role_name'], 'required'],
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Логин уже занят'],
-            [['username', 'email', 'first_name', 'second_name', 'third_name'], 'string', 'min' => 2, 'max' => 255],
+            [['username', 'email', 'first_name', 'second_name', 'third_name', 'role_name'], 'string', 'min' => 1, 'max' => 255],
 
             ['email', 'email'],
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Такой адрес почты уже есть в системе'],
@@ -82,8 +84,13 @@ class SignupForm extends Model
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
 
+        $user->save();
 
-        return $user->save();
+        $auth = \Yii::$app->authManager;
+        $role = $auth->getRole($this->role_name);
+        $auth->assign($role, $user->getId());
+
+        return true;
     }
 
     /**

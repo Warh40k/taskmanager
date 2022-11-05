@@ -12,7 +12,8 @@ use kartik\select2\Select2;
 
     $departments = ArrayHelper::map(\common\models\Department::find()->asArray()->all(), 'department_id', 'name');
     $positions = ArrayHelper::map(\common\models\Position::find()->asArray()->all(), 'position_id', 'name');
-    $schedules = ArrayHelper::map(\common\models\Schedule::find()->asArray()->all(), 'schedule_id', 'name')
+    $schedules = ArrayHelper::map(\common\models\Schedule::find()->asArray()->all(), 'schedule_id', 'name');
+    $roles = ArrayHelper::getColumn(Yii::$app->authManager->getRoles(), 'name');
 ?>
 
 <div class="employee-form">
@@ -26,6 +27,8 @@ use kartik\select2\Select2;
         <?= $form->field($model, 'email') ?>
 
         <?= $form->field($model, 'password')->passwordInput() ?>
+
+        <?= $form->field($model, 'role_name')->widget(Select2::className(), ['data' => $roles]) ?>
 
     <?php endif; ?>
 
