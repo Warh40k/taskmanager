@@ -42,7 +42,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Должность',
                 'value' => \common\models\Position::findOne(['position_id' => $model->position])->name
             ],
-            'schedule',
+            [
+                'label' => 'Расписание',
+                'value' => \common\models\Schedule::findOne(['schedule_id' => $model->schedule])->name
+            ]
         ],
     ]) ?>
 

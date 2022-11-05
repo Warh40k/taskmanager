@@ -12,6 +12,7 @@ use kartik\select2\Select2;
 
     $departments = ArrayHelper::map(\common\models\Department::find()->asArray()->all(), 'department_id', 'name');
     $positions = ArrayHelper::map(\common\models\Position::find()->asArray()->all(), 'position_id', 'name');
+    $schedules = ArrayHelper::map(\common\models\Schedule::find()->asArray()->all(), 'schedule_id', 'name')
 ?>
 
 <div class="employee-form">
@@ -39,17 +40,20 @@ use kartik\select2\Select2;
         'dateFormat' => 'yyyy-MM-dd'
     ])->label('Дата приема') ?>
 
-    <?= $form->field($model, 'position')->textInput()->label('Должность')->widget(Select2::className(), [
+    <?= $form->field($model, 'position')->label('Должность')->widget(Select2::className(), [
             'data' => $positions,
             'options' => ['placeholder' => 'Выберите должность']
     ]) ?>
 
-    <?= $form->field($model, 'department')->textInput()->label('Отдел')->widget(Select2::className(), [
+    <?= $form->field($model, 'department')->label('Отдел')->widget(Select2::className(), [
             'data' => $departments,
             'options' => ['placeholder' => 'Выберите отдел']
     ]) ?>
 
-    <?= $form->field($model, 'schedule')->textInput()->label('Расписание') ?>
+    <?= $form->field($model, 'schedule')->label('Расписание')->widget(Select2::className(), [
+            'data' => $schedules,
+            'options' => ['placeholder' => 'Выберите отдел']
+    ]) ?>
 
 
     <div class="form-group">

@@ -37,8 +37,8 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Сотрудники', 'url' => ['/employee']],
-        ['label' => 'Расписание', 'url' => ['/schedules']],
-        ['label' => 'Обращения', 'url' => ['/appeals']],
+        ['label' => 'Расписание', 'url' => ['/schedule']],
+        ['label' => 'Обращения', 'url' => ['/appeal']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Зарегистрироваться', 'url' => ['/employee/create']];
