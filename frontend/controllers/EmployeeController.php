@@ -4,7 +4,9 @@ namespace frontend\controllers;
 
 use common\models\Employee;
 use common\models\search\EmployeeSearch;
+use common\models\User;
 use frontend\models\SignupForm;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -28,6 +30,17 @@ class EmployeeController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    'only' => ['index', 'view', 'update'],
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'view', 'update'],
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ]
             ]
         );
     }
@@ -111,6 +124,7 @@ class EmployeeController extends Controller
     public function actionDelete($employee_id)
     {
         $this->findModel($employee_id)->delete();
+        User::findByEmployeeId($employee_id)->delete();
 
         return $this->redirect(['index']);
     }

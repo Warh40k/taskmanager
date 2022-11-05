@@ -83,8 +83,7 @@ class SignupForm extends Model
         $user->generateEmailVerificationToken();
 
 
-
-        return $user->save() && $this->sendEmail($user);
+        return $user->save();
     }
 
     /**

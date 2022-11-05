@@ -41,7 +41,7 @@ AppAsset::register($this);
         ['label' => 'Обращения', 'url' => ['/appeals']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+        $menuItems[] = ['label' => 'Зарегистрироваться', 'url' => ['/employee/create']];
     }
 
     echo Nav::widget([
