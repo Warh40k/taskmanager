@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\models\Schedule;
 use common\models\search\ScheduleSearch;
+use frontend\models\CreateScheduleForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -62,21 +63,22 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Creates a new Schedule model.
+     * Creates a new Schedule model.else {
+            $model->loadDefaultValues();
+        }
+
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Schedule();
+        $model = new CreateScheduleForm();
 
         if ($this->request->isPost) {
-            $csv = UploadedFile::getInstance($model, 'calendar_path');
-            if ($model->load($this->request->post(),'') && $model->save()) {
+            $model->calendar_path = UploadedFile::getInstance($model, 'calendar_path');
+            if ($model->load($this->request->post()) && $model->upload()) {
                 return $this->redirect(['view', 'schedule_id' => $model->schedule_id]);
             }
-        } else {
-            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
