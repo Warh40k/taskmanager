@@ -34,7 +34,7 @@ apt-get update && apt-get upgrade -y
 add-apt-repository -y ppa:ondrej/php
 
 info "Install additional software"
-apt-get install -y php8.1-curl php8.1-cli php8.1-intl php8.1-gd php8.1-fpm php8.1-mbstring php8.1-xml unzip nginx php8.1-xdebug
+apt-get install -y php8.1-curl php8.1-cli php8.1-intl php8.1-gd php8.1-fpm php8.1-mbstring php8.1-xml unzip nginx php8.1-xdebug php8.1-zip php8.1-mysql
 
 #info "Configure MySQL"
 #sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
