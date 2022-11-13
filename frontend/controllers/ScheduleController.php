@@ -7,6 +7,7 @@ use common\models\search\ScheduleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ScheduleController implements the CRUD actions for Schedule model.
@@ -70,7 +71,8 @@ class ScheduleController extends Controller
         $model = new Schedule();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            $csv = UploadedFile::getInstance($model, 'calendar_path');
+            if ($model->load($this->request->post(),'') && $model->save()) {
                 return $this->redirect(['view', 'schedule_id' => $model->schedule_id]);
             }
         } else {

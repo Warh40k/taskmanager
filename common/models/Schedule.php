@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "schedules".
@@ -39,6 +40,33 @@ class Schedule extends \yii\db\ActiveRecord
             'schedule_id' => 'Schedule ID',
             'name' => 'Name',
         ];
+    }
+
+    /**
+     * @param $csv - данные csv
+     * @return bool
+     */
+    public function setWorkdays($csv)
+    {
+        echo '<pre>';
+        var_dump($csv);
+        echo '<pre>';
+        exit;
+        return true;
+    }
+
+    /**
+     * @param $runValidation
+     * @param $attributeNames
+     * @return bool|void
+     */
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        $csv = UploadedFile::getInstanceByName('calendar_path');
+        if($this->setWorkdays($csv))
+            return parent::save();
+        else
+            return false;
     }
 
     /**
