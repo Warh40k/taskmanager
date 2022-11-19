@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\time\TimePicker;
 
 /** @var yii\web\View $this */
 /** @var frontend\models\CreateScheduleForm $model */
@@ -17,14 +18,17 @@ use yii\widgets\ActiveForm;
 
     <?php if($action == 'create'): ?>
         <div class="form-group">
-            <?= Html::label('Количество рабочих часов по умолчанию', 'default_work_length', ['class' => 'control-label' ]) ?>
-            <?= Html::textInput('default_work_length', null, ['type' => 'number', 'class' => 'form-control']) ?>
+            <?= $form->field($model, 'default_time_start')->widget(TimePicker::classname(),[
+                'options' => ['readonly' => 'true'],
+                'pluginOptions' => [
+                    'template' => 'dropdown',
+                    'showMeridian' => false]])->label("Время начала работы") ?>
+        </div>
+        <div class="form-group">
+            <?= $form->field($model, 'default_work_length')->textInput([
+                'maxlength' => true])->label("Количество рабочих часов") ?>
         </div>
         <?= $form->field($model, 'calendar_path')->fileInput(['class' => 'form-control']) ?>
-<!--        <div class ="form-group">-->
-<!--            --><?//= Html::label('Импорт праздничных дней', 'calendar_csv_input', ['class' => 'control-label' ]) ?>
-<!--            --><?//= Html::fileInput('calendar_path',null, ['class' => 'form-control']) ?>
-<!--        </div>-->
     <?php endif; ?>
 
     <div class="form-group">

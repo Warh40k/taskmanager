@@ -1,0 +1,8 @@
+web
+.vagrant
+.idea
+vendor
+*.log
+composer.lock
+yii
+yii_test*
