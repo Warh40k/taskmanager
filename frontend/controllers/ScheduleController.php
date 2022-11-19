@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\models\Schedule;
 use common\models\search\ScheduleSearch;
+use common\models\Workday;
 use frontend\models\CreateScheduleForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -116,6 +117,7 @@ class ScheduleController extends Controller
     public function actionDelete($schedule_id)
     {
         $this->findModel($schedule_id)->delete();
+        Workday::deleteAll(['schedule_id' => $schedule_id]);
 
         return $this->redirect(['index']);
     }

@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use common\models\Workday;
 use DateTimeZone;
+use Exception;
 use yii\base\Model;
 use common\models\Schedule;
 use yii\web\UploadedFile;
@@ -19,7 +20,7 @@ class CreateScheduleForm extends Model
     /**
      * @var UploadedFile $calendar_path
      */
-    public UploadedFile $calendar_path;
+    public $calendar_path;
 
     /**
      * {@inheritdoc}
@@ -66,25 +67,34 @@ class CreateScheduleForm extends Model
 
     public function setWorkdaysFromFile($filepath)
     {
-        $csv = $this->parseCsv($filepath);
-        $interval = new \DateInterval('P1D');
-        $timezone = new DateTimeZone('Europe/Moscow');
+        try {
+            $csv = $this->parseCsv($filepath);
+            $interval = new \DateInterval('P1D');
+            $timezone = new DateTimeZone('Europe/Moscow');
 
-        for($date = new \DateTime('now', $timezone); $date < new \DateTime("2025-01-01"); $date->add($interval)) {
+            for($date = new \DateTime('now', $timezone); $date < new \DateTime("2025-01-01"); $date->add($interval)) {
 
-            $day = $date->format('j');
-            $month = $date->format('n');
-            $year = $date->format('Y');
+                $day = $date->format('j');
+                $month = $date->format('n');
+                $year = $date->format('Y');
 
-            if(!array_search($day,$csv[$year][$month])) {
-                $workday = new Workday();
-                $workday->date = $date->format("Y-m-d");
-                $workday->time_start = $this->default_time_start;
-                $workday->work_length = $this->default_work_length;
-                $workday->schedule_id = $this->schedule_id;
-                $workday->save();
+                if(!in_array($day,$csv[$year][$month])) {
+                    $workday = new Workday();
+                    $workday->date = $date->format("Y-m-d");
+                    $workday->time_start = $this->default_time_start;
+                    $workday->work_length = $this->default_work_length;
+                    $workday->schedule_id = $this->schedule_id;
+                    $workday->save();
+                }
             }
         }
+        catch (Exception $e) {
+            return false;
+        } finally {
+            unlink($filepath);
+        }
+
+        return true;
     }
 
     public function upload()
@@ -97,10 +107,9 @@ class CreateScheduleForm extends Model
             if(!is_dir('uploads/calendars'))
                 mkdir('uploads/calendars', 0777, true);
             $filepath = 'uploads/calendars/' . $this->calendar_path->baseName . '-' . time() . '.' . $this->calendar_path->extension;
-            if($this->calendar_path->saveAs($filepath))
-                $this->setWorkdaysFromFile($filepath);
-        } else {
-            return false;
+            if($this->calendar_path->saveAs($filepath) && $this->setWorkdaysFromFile($filepath))
+                return true;
         }
+        return false;
     }
 }
