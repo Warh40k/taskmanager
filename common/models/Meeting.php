@@ -23,4 +23,18 @@ class Meeting extends Activity
         $this->type = ActivityType::Task->value;
         return parent::beforeSave($insert);
     }
+
+    public function getResponsible()
+    {
+        $employee_id = $this->getParticipants()
+            ->where(['status' => ParticipantStatus::Creator->value])->one();
+
+        return $employee_id ? Employee::find()
+            ->where(['employee_id' => $employee_id->employee_id])->one() : false;
+    }
+
+    public function getAttendees()
+    {
+        $this->getParticipants()->where(['status' => ParticipantStatus::Attendee->value])->all();
+    }
 }

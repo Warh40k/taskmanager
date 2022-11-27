@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Ответственный',
                 'value' => function(Activity $model) {
-                    $employee = $model->getParticipants(true)->one();
+                    $employee = $model->getResponsible();
                     return $employee ? "{$employee->first_name} {$employee->second_name}" : "Не назначен";
                 }
             ],

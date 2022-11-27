@@ -107,23 +107,12 @@ class Activity extends \yii\db\ActiveRecord
         }
     }
 
-    public function getParticipants(bool $getOne = false)
+    public function getParticipants()
     {
-        $employees = Participant::find()
+        return Participant::find()
             ->where(['activity_id' => $this->activity_id]);
-        if($this->type == ActivityType::Task->value || $getOne) {
-            $employee_id = ($employees->one())->employee_id ?? "Null";
-            return Employee::find()
-                ->where(['employee_id' => $employee_id]);
-        }
-        else {
-            $employees = $employees->all();
-            return Participant::find()
-                ->where(['status' => ParticipantStatus::Creator->value])->one();
-//            return Employee::find()
-//                ->where(['employee_id'])
-        }
     }
+
     /**
      * {@inheritdoc}
      * @return \common\models\query\ActivityQuery the active query used by this AR class.

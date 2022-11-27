@@ -8,7 +8,7 @@ use Yii;
 enum ParticipantStatus : int
 {
     case Executor = 0;
-    case Participant = 1;
+    case Attendee = 1;
     case Creator = 2;
 }
 

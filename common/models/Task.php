@@ -25,9 +25,11 @@ class Task extends Activity
         return parent::beforeSave($insert);
     }
 
-    public function getParticipants(bool $getOne = false)
+    public function getResponsible()
     {
-
+        $employee_id = $this->getParticipants()->one();
+        return $employee_id ? Employee::find()
+            ->where(['employee_id' => $employee_id->employee_id])->one() : false;
     }
 
 }
