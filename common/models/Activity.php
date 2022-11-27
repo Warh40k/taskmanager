@@ -35,25 +35,24 @@ enum ActivityStatus
     }
 }
 
-//enum ActivityType
-//{
-//    case Task;
-//    case Meeting;
-//    case Exam;
-//
-//    public function name(): string
-//    {
-//        return match($this) {
-//            self::Task => "Задача",
-//            self::Meeting => "Собрание",
-//            self::Exam => "Экзамен",
-//        };
-//    }
-//}
+enum ActivityType: int
+{
+    case Task = 0;
+    case Meeting = 1;
+    case Exam = 2;
+
+    public function name(): string
+    {
+        return match($this) {
+            self::Task => "Задача",
+            self::Meeting => "Собрание",
+            self::Exam => "Экзамен",
+        };
+    }
+}
 
 class Activity extends \yii\db\ActiveRecord
 {
-
 
     /**
      * {@inheritdoc}
@@ -92,6 +91,19 @@ class Activity extends \yii\db\ActiveRecord
             'date_end' => 'Дата окончания',
             'description' => 'Описание',
         ];
+    }
+
+    public static function instantiate($row)
+    {
+        $type = ActivityType::cases()[$row['type']]->value;
+        switch ($type) {
+            case ActivityType::Task->value:
+                return new Task();
+            case ActivityType::Meeting->value:
+                return new Meeting();
+            default:
+                return new self;
+        }
     }
 
     /**

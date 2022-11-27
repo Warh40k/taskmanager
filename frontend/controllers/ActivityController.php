@@ -90,9 +90,9 @@ class ActivityController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($activity_type)
     {
-        $model = new Activity();
+        $model = Activity::instantiate(['type' => $activity_type]);
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {

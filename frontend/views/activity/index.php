@@ -17,9 +17,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Добавить мероприятие', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <div class="dropdown">
+        <?= \yii\bootstrap5\ButtonDropdown::widget([
+            'label' => 'Создать',
+            'dropdown' => [
+                'items' => [
+                    ['label' => 'Задача', 'url' => Url::to(['create', 'activity_type' => 0])],
+                    ['label' => 'Собрание', 'url' => Url::to(['create', 'activity_type' => 1])],
+                    ['label' => 'Тренинг', 'url' => Url::to(['create', 'activity_type' => 2])],
+                ]
+            ]
+        ]) ?>
+    </div>
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
