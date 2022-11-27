@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Activity;
 use common\models\Employee;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -10,16 +11,12 @@ use yii\widgets\Pjax;
 /** @var common\models\search\EmployeeSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Employees';
+$this->title = 'Назначить сотрудника на задачу';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="employee-index">
+<div class="activity-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Employee', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -37,12 +34,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'date_attempt',
             'position',
             'department',
-            //'schedule',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Employee $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'employee_id' => $model->employee_id]);
-                 }
+                'template'  => '{submit-employee}',
+                'urlCreator' => function ($action, Employee $employee, $key, $index, $column) {
+                    $activity_id = Yii::$app->request->get('activity_id');
+                    return Url::toRoute([$action, 'activity_id' => $activity_id, 'employee_id' => $employee->employee_id]);
+                },
+                'buttons' => [
+                    'submit-employee' => function($url) {
+                        return Html::a('<i class="fa-solid fa-check"></i>', $url, [
+                            'title' => 'Подтвердить выбор',
+                            'data-confirm' => 'Вы уверены?'
+                        ]);
+                    }
+                ]
             ],
         ],
     ]); ?>

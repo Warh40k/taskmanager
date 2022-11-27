@@ -9,10 +9,19 @@ namespace common\models\query;
  */
 class ActivityQuery extends \yii\db\ActiveQuery
 {
+    public $type;
     /*public function active()
     {
         return $this->andWhere('[[status]]=1');
     }*/
+
+    public function prepare($builder)
+    {
+        if ($this->type !== null) {
+            $this->andWhere(['type' => $this->type]);
+        }
+        return parent::prepare($builder);
+    }
 
     /**
      * {@inheritdoc}
@@ -22,6 +31,8 @@ class ActivityQuery extends \yii\db\ActiveQuery
     {
         return parent::all($db);
     }
+
+
 
     /**
      * {@inheritdoc}

@@ -31,7 +31,8 @@ class CreateScheduleForm extends Model
             ['name','string'],
             ['default_work_length', 'number'],
             ['default_time_start', 'string'],
-            [['name', 'default_work_length', 'default_time_start'], 'required']
+            [['name', 'default_work_length', 'default_time_start', 'calendar_path'], 'required', 'message' => 'Данное поле является обязательным'],
+            ['calendar_path', 'file', 'extensions' => ['csv']],
         ];
     }
 
@@ -99,6 +100,7 @@ class CreateScheduleForm extends Model
 
     public function upload()
     {
+        $this->calendar_path = UploadedFile::getInstance($this, 'calendar_path');
         $schedule = new Schedule();
         $schedule->name = $this->name;
 

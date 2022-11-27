@@ -12,17 +12,11 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label() ?>
 
-    <?= $form->field($model, 'expected_length')->textInput() ?>
+    <?= $form->field($model, 'expected_length')->textInput()->label() ?>
 
-    <?= $form->field($model, 'date_create')->textInput() ?>
-
-    <?= $form->field($model, 'date_start')->textInput() ?>
-
-    <?= $form->field($model, 'date_end')->textInput() ?>
-
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Activity', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить мероприятие', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
@@ -35,13 +35,39 @@ $this->params['breadcrumbs'][] = $this->title;
             'expected_length',
             'date_create',
             'date_start',
-            //'date_end',
+            'date_end',
+            [
+                'attribute' => 'type',
+                'label' => 'Тип',
+                'value' => function(Activity $model) {
+                    return array_key_exists($model->type,\common\models\ActivityStatus::cases())
+                        ? \common\models\ActivityType::cases()[$model->type]->name()
+                        : "";
+                }
+            ],
+//            [
+//                'attribute' => 'status',
+//                'label' => 'Статус',
+//                'value' => function(Activity $model) {
+//                    return array_key_exists($model->,\common\models\ActivityStatus::cases())
+//                        ? \common\models\ActivityStatus::cases()[$model->type]->name()
+//                        : "";
+//                }
+//            ],
             //'description',
             [
                 'class' => ActionColumn::className(),
+                'template'  => '{view} {update} {delete} {assign}',
                 'urlCreator' => function ($action, Activity $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'activity_id' => $model->activity_id]);
-                 }
+                 },
+                 'buttons' => [
+                     'assign' => function($url) {
+                         return Html::a('<br><i class="fa-sharp fa-solid fa-person-circle-plus"></i>', $url, [
+                                 'title' => 'Назначить сотрудника'
+                         ]);
+                     }
+                 ]
             ],
         ],
     ]); ?>

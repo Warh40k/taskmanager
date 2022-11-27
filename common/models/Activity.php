@@ -12,11 +12,49 @@ use Yii;
  * @property float|null $expected_length
  * @property string $date_create
  * @property string|null $date_start
+ * @property int $type
  * @property string|null $date_end
  * @property string|null $description
  */
+
+enum ActivityStatus
+{
+    case Created;
+    case Working;
+    case Paused;
+    case Closed;
+
+    public function name(): string
+    {
+        return match($this) {
+            self::Created => "Создана",
+            self::Working => "В работе",
+            self::Paused => "Приостановлена",
+            self::Closed => "Закрыта"
+        };
+    }
+}
+
+//enum ActivityType
+//{
+//    case Task;
+//    case Meeting;
+//    case Exam;
+//
+//    public function name(): string
+//    {
+//        return match($this) {
+//            self::Task => "Задача",
+//            self::Meeting => "Собрание",
+//            self::Exam => "Экзамен",
+//        };
+//    }
+//}
+
 class Activity extends \yii\db\ActiveRecord
 {
+
+
     /**
      * {@inheritdoc}
      */
@@ -31,10 +69,12 @@ class Activity extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['expected_length'], 'number'],
+            [['name', 'expected_length', 'description'], 'required', 'message' => 'Данное поле обязательно к заполнению'],
+            [['expected_length'], 'number', 'max' => 100, 'min' => 1,
+                'tooBig' => 'Значение должно быть меньше 100', 'tooSmall' => 'Значение должно быть больше 0'],
             [['date_create', 'date_start', 'date_end'], 'safe'],
             [['name', 'description'], 'string', 'max' => 255],
+            ['type', 'integer']
         ];
     }
 
@@ -44,13 +84,13 @@ class Activity extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'activity_id' => 'Activity ID',
-            'name' => 'Name',
-            'expected_length' => 'Expected Length',
-            'date_create' => 'Date Create',
-            'date_start' => 'Date Start',
-            'date_end' => 'Date End',
-            'description' => 'Description',
+            'activity_id' => 'Ид мероприятия',
+            'name' => 'Название',
+            'expected_length' => 'Ожидаемая продолжительность (в часах)',
+            'date_create' => 'Дата создания',
+            'date_start' => 'Дата начала',
+            'date_end' => 'Дата окончания',
+            'description' => 'Описание',
         ];
     }
 

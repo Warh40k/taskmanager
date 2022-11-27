@@ -29,7 +29,8 @@ return [
             'targets' => [
                 [
                     'class' => \yii\log\FileTarget::class,
-                    'levels' => ['error', 'warning'],
+                    'logVars' => [],
+                    'levels' => ['error', 'warning', 'info', 'trace'],
                 ],
             ],
         ],

@@ -12,7 +12,7 @@ use kartik\time\TimePicker;
 
 <div class="schedule-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label('Наименование расписания') ?>
 

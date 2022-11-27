@@ -38,9 +38,9 @@ class Position extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'position_id' => 'Position ID',
-            'name' => 'Name',
-            'salary' => 'Salary',
+            'position_id' => 'Ид должности',
+            'name' => 'Название',
+            'salary' => 'Запрлата',
         ];
     }
 

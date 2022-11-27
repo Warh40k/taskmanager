@@ -45,12 +45,12 @@ class Workday extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'workday_id' => 'Workday ID',
-            'schedule_id' => 'Schedule ID',
-            'date' => 'Date',
-            'time_start' => 'Time Start',
-            'work_length' => 'Work Length',
-            'rest_length' => 'Rest Length',
+            'workday_id' => 'Ид рабочего дня',
+            'schedule_id' => 'Ид расписания',
+            'date' => 'Дата',
+            'time_start' => 'Время начала работы',
+            'work_length' => 'Продолжительность рабочего времени',
+            'rest_length' => 'Продолжительность отдыха',
         ];
     }
 

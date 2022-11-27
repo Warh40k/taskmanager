@@ -76,7 +76,6 @@ class ScheduleController extends Controller
         $model = new CreateScheduleForm();
 
         if ($this->request->isPost) {
-            $model->calendar_path = UploadedFile::getInstance($model, 'calendar_path');
             if ($model->load($this->request->post()) && $model->upload()) {
                 return $this->redirect(['view', 'schedule_id' => $model->schedule_id]);
             }

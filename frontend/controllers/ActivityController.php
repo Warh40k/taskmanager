@@ -3,7 +3,9 @@
 namespace frontend\controllers;
 
 use common\models\Activity;
+use common\models\Participant;
 use common\models\search\ActivitySearch;
+use common\models\search\EmployeeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -45,6 +47,29 @@ class ActivityController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionAssign($activity_id)
+    {
+        $searchModel = new EmployeeSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        return $this->render('assign', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'activity_id' => $activity_id
+        ]);
+    }
+
+    public function actionSubmitEmployee($employee_id, $activity_id)
+    {
+        $participant = new Participant();
+        $participant->activity_id = $activity_id;
+        $participant->employee_id =  $employee_id;
+        $participant->status = 0;
+        if ($participant->save())
+            return $this->actionIndex();
+        else
+            return $this->actionAssign($activity_id);
     }
 
     /**
