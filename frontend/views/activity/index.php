@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /** @var common\models\search\ActivitySearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Activities';
+$this->title = 'Мероприятия';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="activity-index">
@@ -20,6 +20,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="dropdown">
         <?= \yii\bootstrap5\ButtonDropdown::widget([
             'label' => 'Создать',
+            'options' => [
+                'class' => 'btn-success',
+                'data-toggle' => 'dropdown'
+            ],
             'dropdown' => [
                 'items' => [
                     ['label' => 'Задача', 'url' => Url::to(['create', 'activity_type' => 0])],
@@ -52,6 +56,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return array_key_exists($model->type,\common\models\ActivityStatus::cases())
                         ? \common\models\ActivityType::cases()[$model->type]->name()
                         : "";
+                }
+            ],
+            [
+                'label' => 'Ответственный',
+                'value' => function(Activity $model) {
+                    $employee = $model->getParticipants(true)->one();
+                    return $employee ? "{$employee->first_name} {$employee->second_name}" : "Не назначен";
                 }
             ],
 //            [

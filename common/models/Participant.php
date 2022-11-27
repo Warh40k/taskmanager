@@ -4,6 +4,14 @@ namespace common\models;
 
 use Yii;
 
+
+enum ParticipantStatus : int
+{
+    case Executor = 0;
+    case Participant = 1;
+    case Creator = 2;
+}
+
 /**
  * This is the model class for table "employee_activity".
  *
@@ -11,13 +19,6 @@ use Yii;
  * @property int|null $employee_id
  * @property int|null $status
  */
-enum ParticipantStatus
-{
-    case Executor;
-    case Participant;
-    case Creator;
-}
-
 class Participant extends \yii\db\ActiveRecord
 {
 

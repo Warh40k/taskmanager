@@ -25,4 +25,9 @@ class Task extends Activity
         return parent::beforeSave($insert);
     }
 
+    public function getParticipants(bool $getOne = false)
+    {
+
+    }
+
 }

@@ -62,6 +62,7 @@ class ActivityController extends Controller
 
     public function actionSubmitEmployee($employee_id, $activity_id)
     {
+        Participant::deleteAll(['activity_id' => $activity_id]);
         $participant = new Participant();
         $participant->activity_id = $activity_id;
         $participant->employee_id =  $employee_id;
