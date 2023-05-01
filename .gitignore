@@ -6,3 +6,17 @@ vendor
 composer.lock
 yii
 yii_test*
+/.env
+/bootrstrap_view/assets/dist/js/bootstrap.bundle.min.js
+/bootrstrap_view/assets/dist/js/bootstrap.bundle.min.js.map
+/bootrstrap_view/assets/dist/css/bootstrap.min.css
+/bootrstrap_view/assets/dist/css/bootstrap.min.css.map
+/bootrstrap_view/assets/dist/css/bootstrap.rtl.min.css
+/bootrstrap_view/assets/dist/css/bootstrap.rtl.min.css.map
+/bootrstrap_view/assets/brand/bootstrap-logo.svg
+/bootrstrap_view/assets/brand/bootstrap-logo-white.svg
+/composer.phar
+/bootrstrap_view/dashboard/dashboard.css
+/bootrstrap_view/dashboard/dashboard.js
+/bootrstrap_view/dashboard/dashboard.rtl.css
+/bootrstrap_view/dashboard/index.html

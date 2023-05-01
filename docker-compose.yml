@@ -2,34 +2,23 @@ version: '3.2'
 
 volumes:
   mysql-data:
-    external: true
   phpmyadmin-volume:
-    external: true
 
 services:
-#  frontend:
-#    build: frontend
-#    ports:
-#      - 20080:80
-#    volumes:
-#      # Re-use local composer cache via host-volume
-#      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-#      # Mount source-code for development
-#      - ./:/app
-#    links:
-#      - data_base:db
-#    env_file:
-#      - .env
-#
-#  backend:
-#    build: backend
-#    ports:
-#      - 21080:80
-#    volumes:
-#      # Re-use local composer cache via host-volume
-#      - ~/.composer-docker/cache:/root/.composer/cache:delegated
-#      # Mount source-code for development
-#      - ./:/app
+  frontend:
+    build: frontend
+    ports:
+      - 20080:80
+    volumes:
+      # Re-use local composer cache via host-volume
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      # Mount source-code for development
+      - ./:/app
+    links:
+      - data_base:db
+    env_file:
+      - .env
+
   data_base:
     image: mariadb:10.9.3
     environment:
