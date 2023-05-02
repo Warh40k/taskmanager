@@ -4,8 +4,6 @@ namespace common\models;
 
 use Yii;
 
-
-
 enum ActivityStatus
 {
     case Created;
@@ -96,21 +94,14 @@ class Activity extends \yii\db\ActiveRecord
 
     public static function instantiate($row)
     {
-        $type = ActivityType::cases()[$row['type']]->value;
-        switch ($type) {
-            case ActivityType::Task->value:
-                return new Task();
-            case ActivityType::Meeting->value:
-                return new Meeting();
-            default:
-                return new self;
-        }
+        return new Task();
     }
 
     public function getParticipants()
     {
-        return Participant::find()
-            ->where(['activity_id' => $this->activity_id]);
+        $query = Participant::find()
+            ->where(['activity_id' => $this->activity_id]);;
+        return $query;
     }
 
     /**

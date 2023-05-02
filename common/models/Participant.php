@@ -13,7 +13,7 @@ enum ParticipantStatus : int
 }
 
 /**
- * This is the model class for table "employee_activity".
+ * This is the model class for table "employee-activity".
  *
  * @property int|null $activity_id
  * @property int|null $employee_id
@@ -27,7 +27,7 @@ class Participant extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'employee_activity';
+        return 'employee-activity';
     }
 
     /**

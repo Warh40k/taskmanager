@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\models\Activity;
 use common\models\Participant;
+use common\models\ParticipantStatus;
 use common\models\search\ActivitySearch;
 use common\models\search\EmployeeSearch;
 use yii\web\Controller;
@@ -97,6 +98,13 @@ class ActivityController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
+
+                $creator = new Participant();
+                $creator->status = ParticipantStatus::Creator->value;
+                $creator->activity_id = $model->activity_id;
+                $creator->employee_id = \Yii::$app->user->id;
+                $creator->save();
+
                 return $this->redirect(['view', 'activity_id' => $model->activity_id]);
             }
         } else {

@@ -90,7 +90,8 @@ class CreateScheduleForm extends Model
             }
         }
         catch (Exception $e) {
-            return false;
+            \Yii::error($e->getMessage());
+            return $e->getMessage();
         } finally {
             unlink($filepath);
         }

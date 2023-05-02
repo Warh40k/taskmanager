@@ -27,8 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'dropdown' => [
                 'items' => [
                     ['label' => 'Задача', 'url' => Url::to(['create', 'activity_type' => 0])],
-                    ['label' => 'Собрание', 'url' => Url::to(['create', 'activity_type' => 1])],
-                    ['label' => 'Тренинг', 'url' => Url::to(['create', 'activity_type' => 2])],
                 ]
             ]
         ]) ?>
@@ -61,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'label' => 'Ответственный',
                 'value' => function(Activity $model) {
-                    $employee = $model->getResponsible();
+                    $employee = $model->getExecutor();
                     return $employee ? "{$employee->first_name} {$employee->second_name}" : "Не назначен";
                 }
             ],

@@ -9,7 +9,7 @@ use yii\widgets\DetailView;
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Schedules', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
+\frontend\assets\pages\ScheduleAsset::register($this);
 ?>
 <div class="schedule-view">
 
@@ -33,5 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
         ],
     ]) ?>
+
+    <div id='calendar'></div>
+
 
 </div>
