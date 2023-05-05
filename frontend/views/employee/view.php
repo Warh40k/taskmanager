@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
@@ -44,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'label' => 'Расписание',
-                'value' => \common\models\Schedule::findOne(['schedule_id' => $model->schedule])->name
+                'value' => ArrayHelper::getValue(\common\models\Schedule::findOne(['schedule_id' => $model->schedule]), 'name'),
             ]
         ],
     ]) ?>
