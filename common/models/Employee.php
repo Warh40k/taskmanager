@@ -64,4 +64,9 @@ class Employee extends \yii\db\ActiveRecord
     {
         return new \common\models\query\EmployeeQuery(get_called_class());
     }
+
+    public static function deleteScheduleId($schedule_id)
+    {
+        return self::updateAll(['schedule_id' => ''], ['schedule' => $schedule_id]);
+    }
 }

@@ -7,6 +7,7 @@ use common\models\Participant;
 use common\models\ParticipantStatus;
 use common\models\search\ActivitySearch;
 use common\models\search\EmployeeSearch;
+use common\models\Task;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -68,10 +69,16 @@ class ActivityController extends Controller
         $participant->activity_id = $activity_id;
         $participant->employee_id =  $employee_id;
         $participant->status = 0;
-        if ($participant->save())
+        if ($participant->save()) {
+            $task = Task::findOne(['activity_id' => $activity_id]);
+            if (!isset($task->date_start)) {
+                $task->date_start = date('Y-m-d H:i');
+                $task->save();
+            }
             return $this->actionIndex();
-        else
-            return $this->actionAssign($activity_id);
+        }
+
+        return $this->actionAssign($activity_id);
     }
 
     /**

@@ -3,8 +3,6 @@
 namespace common\models;
 
 use common\models\query\WorkdayQuery;
-use DateTime;
-use Yii;
 
 /**
  * This is the model class for table "workdays".
@@ -15,6 +13,8 @@ use Yii;
  * @property string $time_start
  * @property float $work_length
  * @property float|null $rest_length
+ * @property int $weekend
+ * @property int $default
  */
 class Workday extends \yii\db\ActiveRecord
 {
@@ -32,8 +32,8 @@ class Workday extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['schedule_id', 'date', 'time_start', 'work_length'], 'required'],
-            [['schedule_id'], 'integer'],
+            [['schedule_id', 'time_start', 'work_length'], 'required'],
+            [['schedule_id','default', 'weekend'], 'integer'],
             [['date', 'time_start'], 'string'],
             [['work_length', 'rest_length'], 'number'],
         ];
@@ -51,6 +51,8 @@ class Workday extends \yii\db\ActiveRecord
             'time_start' => 'Время начала работы',
             'work_length' => 'Продолжительность рабочего времени',
             'rest_length' => 'Продолжительность отдыха',
+            'default' => 'Значения по умолчанию',
+            'weekend' => 'Выходной день',
         ];
     }
 
