@@ -10,6 +10,7 @@ use common\models\Workday;
 use frontend\models\CreateScheduleForm;
 use yii\base\ErrorException;
 use yii\db\Exception;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -65,62 +66,60 @@ class ScheduleController extends Controller
      */
     public function actionView($schedule_id)
     {
+        return $this->render('view', [
+            'model' => $this->findModel($schedule_id),
+        ]);
+    }
 
+    public function actionGetEvents($schedule_id)
+    {
+        if(\Yii::$app->request->isAjax)
+            return 'hello';
+        // Определение дефолтного значения дня расписания
         $default_day = Workday::findOne(['default' => 1]);
 
         if(!$default_day)
             throw new Exception('No default days in schedule');
 
+        // Задаем интервал для составления расписания (от даты создания расписания до текущей + 30 дней)
         $current_date = new \DateTime();
-        $current_date2 = new \DateTime();
         $interval = new \DateInterval('P30D');
-        date_sub($current_date, $interval);
-        date_add($current_date2, $interval);
-        $period = (new \DatePeriod($current_date, new \DateInterval('P1D'), $current_date2));
-        $dates = [];
-/*        echo '<pre>';
-        var_dump("dates", $period->getIterator()->current(), $current_date, $current_date2, $interval);
-        echo '<pre>';
-        exit;*/
-        foreach ($period as $key => $value) {
+        date_add($current_date, $interval);
+        $period = (new \DatePeriod(new \DateTime($default_day->date), new \DateInterval('P1D'), $current_date))
+            ->getIterator();
 
-            $dates[] = $value;
-        }
+        // Выборка выходных и нестандартных дней
 
         $workdays = Workday::find()
             ->where([
                 'schedule_id' => $schedule_id,
-                'date' => $dates,
-                'default' => null,
-            ])->all();
-/*        echo '<pre>';
-        var_dump($workdays);
-        echo '<pre>';
-        exit;*/
-        if(!$workdays or !$default_day)
-            throw new Exception('No days in schedule');
+                'default' => 0,
+            ])
+            ->all();
+        $workdays = ArrayHelper::index($workdays, 'date');
 
         $events = [];
 
-        while($date = $period->current()) {
+        foreach($period as $date) {
+            $date = $date->format('Y-m-d');
 
-            if ($day->weekend or $day->default)
-                continue;
+            $day = $default_day;
+
+            if($db_date = ArrayHelper::getValue($workdays, $date))
+
+                if ($db_date->weekend)
+                    continue;
+                else
+                    $day = $db_date;
+
             $event = [];
-            $event['title'] = $day->date;
-            $event['start'] = $day->time_start;
+//            $event['title'] = $date;
+            $event['start'] = $date.'T'.$day->time_start;
             $task_length = \DateInterval::createFromDateString($day->work_length.' hours');
-            $event['end'] = date_add(new \DateTime($day->time_start), $task_length)->format('H:i');
-/*            echo '<pre>';
-            var_dump($day->date);
-            echo '<pre>';
-            exit;*/
-            $period->next();
+            $event['end'] = $date.'T'.date_add(new \DateTime($day->time_start), $task_length)->format('H:i');
+            $events[] = $event;
         }
-
-        return $this->render('view', [
-            'model' => $this->findModel($schedule_id),
-        ]);
+        return json_encode($events);
     }
 
     /**
