@@ -64,17 +64,15 @@ class ScheduleController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      * @throws Exception
      */
-    public function actionView($schedule_id)
+    public function actionView(int $schedule_id)
     {
         return $this->render('view', [
             'model' => $this->findModel($schedule_id),
         ]);
     }
 
-    public function actionGetEvents($schedule_id)
+    public function actionGetEvents($schedule_id = null)
     {
-        if(\Yii::$app->request->isAjax)
-            return 'hello';
         // Определение дефолтного значения дня расписания
         $default_day = Workday::findOne(['default' => 1]);
 
@@ -88,15 +86,14 @@ class ScheduleController extends Controller
         $period = (new \DatePeriod(new \DateTime($default_day->date), new \DateInterval('P1D'), $current_date))
             ->getIterator();
 
-        // Выборка выходных и нестандартных дней
-
+        // Получение выходных и нестандартных дней
         $workdays = Workday::find()
-            ->where([
-                'schedule_id' => $schedule_id,
-                'default' => 0,
-            ])
-            ->all();
-        $workdays = ArrayHelper::index($workdays, 'date');
+            ->where(['default' => 0,]);
+
+        if ($schedule_id)
+            $workdays->andWhere(['schedule_id' => $schedule_id]);
+
+        $workdays = ArrayHelper::index($workdays->all(), 'date');
 
         $events = [];
 

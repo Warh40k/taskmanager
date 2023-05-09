@@ -12,6 +12,7 @@ use yii\widgets\Pjax;
 
 $this->title = 'Schedules';
 $this->params['breadcrumbs'][] = $this->title;
+\frontend\assets\pages\ScheduleAsset::register($this);
 ?>
 <div class="schedule-index">
 
@@ -41,5 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <?php Pjax::end(); ?>
+
+    <div id='calendar' data-classname="schedule"></div>
 
 </div>

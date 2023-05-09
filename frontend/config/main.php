@@ -1,4 +1,7 @@
 <?php
+
+use yii\web\UrlNormalizer;
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -42,6 +45,9 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+            ],
+            'normalizer' => [
+                'class' => 'yii\web\UrlNormalizer',
             ],
         ],
 

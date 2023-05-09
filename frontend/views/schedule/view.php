@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-    <div id='calendar'></div>
+    <div id='calendar' data-classname="schedule" data-field="schedule_id" data-id="<?= $model->schedule_id ?>"></div>
 
 
 </div>
