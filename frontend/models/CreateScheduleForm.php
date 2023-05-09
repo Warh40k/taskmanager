@@ -71,6 +71,7 @@ class CreateScheduleForm extends Model
         $day = new Workday();
         $day->default = 1;
         $day->weekend = 0;
+        $day->date = (new \DateTime())->format('Y-m-d');
         $day->schedule_id = $this->schedule_id;
         $day->work_length = $this->default_work_length;
         $day->time_start = $this->default_time_start;

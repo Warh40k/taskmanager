@@ -71,10 +71,10 @@ class ScheduleController extends Controller
         ]);
     }
 
-    public function actionGetEvents($schedule_id = null)
+    public function actionGetEvents($schedule_id)
     {
         // Определение дефолтного значения дня расписания
-        $default_day = Workday::findOne(['default' => 1]);
+        $default_day = Workday::findOne(['schedule_id' => $schedule_id,'default' => 1]);
 
         if(!$default_day)
             throw new Exception('No default days in schedule');
