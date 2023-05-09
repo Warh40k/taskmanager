@@ -14,7 +14,8 @@ services:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       # Mount source-code for development
       - ./:/app
-      - ./config:/etc/apache2/sites-available
+      - ./config/apache/sites-available:/etc/apache2/sites-available
+      - ./config/php/conf.d:/usr/local/etc/php/conf.d
     links:
       - data_base:db
     env_file:
