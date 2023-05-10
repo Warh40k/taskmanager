@@ -86,9 +86,9 @@ class ScheduleController extends Controller
         $events = [];
 
         // Задаем интервал для составления расписания (от даты создания расписания до текущей + 30 дней)
-        $current_date = new \DateTime();
+        $period_end = new \DateTime();
         $interval = new \DateInterval('P30D');
-        date_add($current_date, $interval);
+        date_add($period_end, $interval);
 
         // Цвета для фона (в идеале куда-нибудь вынести)
         $background_colors = array('#282E33', '#25373A', '#164852', '#495E67', '#FF3838');
@@ -97,16 +97,16 @@ class ScheduleController extends Controller
         // Список расписаний ид-название (для заголовков)
         $schedules = ArrayHelper::map(Schedule::find()->asArray()->all(), 'schedule_id', 'name');
 
-        // Получение выходных и нестандартных дней
+        // Получение выходных и нестандартных дней (вообще все)
         $all_workdays = Workday::find()
-            ->addSelect('*')
             ->where(['default' => 0])
+            ->andWhere('date < "'.$period_end->format('Y-m-d').'"')
             ->all();
         $all_workdays = ArrayHelper::index($all_workdays, 'date', 'schedule_id');
 
         foreach($default_days as $default_day) {
-
-            $period = (new \DatePeriod(new \DateTime($default_day->date), new \DateInterval('P1D'), $current_date))
+            // Период для вывода расписания
+            $period = (new \DatePeriod(new \DateTime($default_day->date), new \DateInterval('P1D'), $period_end))
                 ->getIterator();
 
             $workdays = $all_workdays[$default_day->schedule_id];
