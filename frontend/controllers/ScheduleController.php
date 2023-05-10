@@ -71,51 +71,72 @@ class ScheduleController extends Controller
         ]);
     }
 
-    public function actionGetEvents($schedule_id)
+    public function actionGetEvents($schedule_id = "")
     {
         // Определение дефолтного значения дня расписания
-        $default_day = Workday::findOne(['schedule_id' => $schedule_id,'default' => 1]);
+        if ($schedule_id)
+            $default_days = Workday::find()->where(['schedule_id' => $schedule_id,'default' => 1])->all();
+        else
+            $default_days = Workday::find()->where(['default' => 1])->all();
 
-        if(!$default_day)
+        if(!$default_days)
             throw new Exception('No default days in schedule');
+
+        // Массив событий для вывода в календарь
+        $events = [];
 
         // Задаем интервал для составления расписания (от даты создания расписания до текущей + 30 дней)
         $current_date = new \DateTime();
         $interval = new \DateInterval('P30D');
         date_add($current_date, $interval);
-        $period = (new \DatePeriod(new \DateTime($default_day->date), new \DateInterval('P1D'), $current_date))
-            ->getIterator();
+
+        // Цвета для фона (в идеале куда-нибудь вынести)
+        $background_colors = array('#282E33', '#25373A', '#164852', '#495E67', '#FF3838');
+        shuffle($background_colors);
+
+        // Список расписаний ид-название (для заголовков)
+        $schedules = ArrayHelper::map(Schedule::find()->asArray()->all(), 'schedule_id', 'name');
 
         // Получение выходных и нестандартных дней
-        $workdays = Workday::find()
-            ->where(['default' => 0,]);
+        $all_workdays = Workday::find()
+            ->addSelect('*')
+            ->where(['default' => 0])
+            ->all();
+        $all_workdays = ArrayHelper::index($all_workdays, 'date', 'schedule_id');
 
-        if ($schedule_id)
-            $workdays->andWhere(['schedule_id' => $schedule_id]);
+        foreach($default_days as $default_day) {
 
-        $workdays = ArrayHelper::index($workdays->all(), 'date');
+            $period = (new \DatePeriod(new \DateTime($default_day->date), new \DateInterval('P1D'), $current_date))
+                ->getIterator();
 
-        $events = [];
+            $workdays = $all_workdays[$default_day->schedule_id];
 
-        foreach($period as $date) {
-            $date = $date->format('Y-m-d');
+            $bg_color = array_shift($background_colors);
 
-            $day = $default_day;
+            foreach($period as $date) {
+                $date = $date->format('Y-m-d');
 
-            if($db_date = ArrayHelper::getValue($workdays, $date))
+                // Сначала берем значения по умолчанию
+                $day = $default_day;
 
-                if ($db_date->weekend)
-                    continue;
-                else
-                    $day = $db_date;
+                if($db_date = ArrayHelper::getValue($workdays, $date))
+                    // Если выходной день
+                    if ($db_date->weekend)
+                        continue;
+                    else
+                        // Если нестандартный день, то берем его
+                        $day = $db_date;
 
-            $event = [];
-//            $event['title'] = $date;
-            $event['start'] = $date.'T'.$day->time_start;
-            $task_length = \DateInterval::createFromDateString($day->work_length.' hours');
-            $event['end'] = $date.'T'.date_add(new \DateTime($day->time_start), $task_length)->format('H:i');
-            $events[] = $event;
+                $task_length = \DateInterval::createFromDateString($day->work_length.' hours');
+                $events[] = [
+                    'title' => $schedules[$day->schedule_id],
+                    'start' => $date.'T'.$day->time_start,
+                    'end' => $date.'T'.date_add(new \DateTime($day->time_start), $task_length)->format('H:i'),
+                    'color' => $bg_color,
+                ];
+            }
         }
+
         return json_encode($events);
     }
 
