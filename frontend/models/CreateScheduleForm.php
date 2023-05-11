@@ -91,12 +91,11 @@ class CreateScheduleForm extends Model
                 $month = $date->format('n');
                 $year = $date->format('Y');
 
-                if(in_array($day,$csv[$year][$month])) {
+                if(!in_array($day,$csv[$year][$month])) {
                     $workday = new Workday();
                     $workday->date = $date->format("Y-m-d");
                     $workday->time_start = $this->default_time_start;
                     $workday->work_length = $this->default_work_length;
-                    $workday->weekend = 1;
                     $workday->schedule_id = $this->schedule_id;
                     $workday->save();
                 }
@@ -123,7 +122,7 @@ class CreateScheduleForm extends Model
             if(!is_dir('uploads/calendars'))
                 mkdir('uploads/calendars', 0777, true);
             $filepath = 'uploads/calendars/' . $this->calendar_path->baseName . '-' . time() . '.' . $this->calendar_path->extension;
-            if($this->calendar_path->saveAs($filepath) && $this->setDefaultWorkday() && $this->setWorkdaysFromFile($filepath))
+            if($this->calendar_path->saveAs($filepath) && $this->setWorkdaysFromFile($filepath))
                 return true;
         }
         return false;
