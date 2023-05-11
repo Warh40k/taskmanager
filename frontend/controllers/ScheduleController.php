@@ -67,8 +67,13 @@ class ScheduleController extends Controller
     public function actionView(int $schedule_id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($schedule_id),
+            'schedule' => $this->findModel($schedule_id),
         ]);
+    }
+
+    public static function getWorkdays(int $schedule_id, int $days)
+    {
+
     }
 
     public function actionGetEvents($schedule_id = "")
@@ -92,7 +97,6 @@ class ScheduleController extends Controller
 
         // Цвета для фона (в идеале куда-нибудь вынести)
         $background_colors = array('#282E33', '#25373A', '#164852', '#495E67', '#FF3838');
-        shuffle($background_colors);
 
         // Список расписаний ид-название (для заголовков)
         $schedules = ArrayHelper::map(Schedule::find()->asArray()->all(), 'schedule_id', 'name');
@@ -104,6 +108,7 @@ class ScheduleController extends Controller
             ->all();
         $all_workdays = ArrayHelper::index($all_workdays, 'date', 'schedule_id');
 
+        // Перебор дефолтных дней каждого расписания
         foreach($default_days as $default_day) {
             // Период для вывода расписания
             $period = (new \DatePeriod(new \DateTime($default_day->date), new \DateInterval('P1D'), $period_end))
